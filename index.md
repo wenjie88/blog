@@ -1,6 +1,6 @@
 ## Welcome to GitHub Pages
 
-[点击到2md](./2.md)
+[vue中webpack配置的坑](./vue中webpack配置的坑.md)
 
 You can use the [editor on GitHub](https://github.com/wenjie88/blog/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
 
