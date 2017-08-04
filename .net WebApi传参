@@ -1,0 +1,143 @@
+#Get
+情况1：请求url  /one 。 将会匹配第二个方法
+情况2：请求URL  /one?name=abc 。 匹配第一个方法。 当第一个方法不存在时，将会匹配第二个方法。
+情况3：请求url  /one?name=abc&age=12。 匹配第三个方法，当第三个方法不存在时，将会匹配第一个方法。
+情况4：请求URL  /two?name=abc&age=12。 匹配第四个方法，可以自动解析这个model。不过要写[FromUri]
+总结： 请求过来，会先匹配action名，然后匹配参数名，参数有哪个名，就先匹配最匹配的那个方法。
+
+
+```c#
+
+        [HttpGet]
+        [Route("one")]
+        public dynamic one(string name)
+        {
+            string s = null;
+            return new { name = "wenjie", date = DateTime.Now, user = s };
+        }
+
+        [HttpGet]
+        [Route("one")]
+        public dynamic one()
+        {
+            return new { name = "wenjie", date = DateTime.Now, user = s };
+        }
+
+
+        [HttpGet]
+        [Route("one")]
+        public dynamic one(string name, int age)
+        {
+            return new { name = "wenjie", date = DateTime.Now, user = s };
+        }
+        
+        [HttpGet]
+        [Route("two")]
+        public dynamic two([FromUri]model m)
+        {
+            string s = m.name;
+            int a = m.age;
+            return new { name = "two", date = DateTime.Now, user = s };
+        }
+        
+         public class model
+        {
+            public string name { get; set; }
+            public int age { get; set; }
+        }
+```
+
+
+#Post
+情况1： m 能拿到对应的对象字段
+```javascript
+ $.ajax({
+        type: "post",
+        url: "/home/per",
+        data: {name:"wenjie",age:12},
+        success: function (data, status) {}
+ });
+```
+
+```c#
+        [HttpPost]
+        [Route("per")]
+        public dynamic per(model m)
+        {
+            string s = m.name;
+            int a = m.age;
+            return new { name = "two", date = DateTime.Now, user = s };
+        }
+```
+
+情况2： m 能拿到对应的对象字段
+```javascript
+   $.ajax({
+        type: "post",
+        url: "/api/marketapi/per",
+        contentType: 'application/json',
+        data: JSON.stringify({name:"wenjie",age:12}),
+        success: function (data, status) {}
+    });
+```
+
+```c#
+        [HttpPost]
+        [Route("per")]
+        public dynamic per(model m)
+        {
+            string s = m.name;
+            int a = m.age;
+            return new { name = "two", date = DateTime.Now, user = s };
+        }
+```
+
+
+情况3： m 能拿到对应的对象字段
+```javascript
+   $.ajax({
+        type: "post",
+        url: "/api/marketapi/per",
+        contentType: 'application/json',
+        data: JSON.stringify({name:"wenjie",age:12}),
+        success: function (data, status) {}
+    });
+```
+
+```c#
+        [HttpPost]
+        [Route("per")]
+        public dynamic per(dynamic m)
+        {
+            string s = m.name;
+            int a = m.age;
+            return new { name = "two", date = DateTime.Now, user = s };
+        }
+```
+
+
+
+
+情况4： m 不能拿到对应的对象字段
+```javascript
+   $.ajax({
+        type: "post",
+        url: "/api/marketapi/per",
+        data: {name:"wenjie",age:12},
+        success: function (data, status) {}
+    });
+```
+
+```c#
+        [HttpPost]
+        [Route("per")]
+        public dynamic per(dynamic m)
+        {
+            string s = m.name;
+            int a = m.age;
+            return new { name = "two", date = DateTime.Now, user = s };
+        }
+```
+
+
+
